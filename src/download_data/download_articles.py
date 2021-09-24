@@ -10,9 +10,6 @@ from src import time_counter
 from src.utils import create_directory
 
 
-# TODO Pobrac morfeusza, zamienic slowo na najprostsza forme i zrobic podsumowanie co najczesciej wystepuje +
-#  rozklad dlugosci atrykulow pod wzgledem dlugosci ogolem oraz liczby slow
-
 def find_iter(soup, tagname):
     tag = soup.find(tagname)
     while tag is not None:

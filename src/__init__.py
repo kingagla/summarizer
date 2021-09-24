@@ -2,6 +2,8 @@ import logging
 import time
 import numpy as np
 
+# TODO Pobrac morfeusza, zamienic slowo na najprostsza forme i zrobic podsumowanie co najczesciej wystepuje +
+#  rozklad dlugosci atrykulow pod wzgledem dlugosci ogolem oraz liczby slow
 
 logger = '../../data/logs.log'
 logging.basicConfig(format='%(asctime)s :: %(levelname)s :: %(funcName)s :: %(lineno)d :: %(message)s',
