@@ -27,7 +27,7 @@ def load_page(url, n_pages):
 
 
 @time_counter
-def main(url, n_pages, saving_directory):
+def download_articles(url, n_pages, saving_directory):
     soups = load_page(url, n_pages)
     i = 0
     for soup in tqdm(soups, total=n_pages):
@@ -63,4 +63,4 @@ def main(url, n_pages, saving_directory):
 if __name__ == '__main__':
     url_ = "https://wiadomosci.wp.pl"
     n_pages_ = 380
-    main(url_, n_pages_, '../../data/articles/')
+    download_articles(url_, n_pages_, '../../data/articles/')
