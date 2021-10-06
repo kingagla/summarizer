@@ -1,4 +1,5 @@
 import logging
+import spacy
 import time
 
 import numpy as np
@@ -6,6 +7,7 @@ import numpy as np
 logger = '../data/logs.log'
 logging.basicConfig(format='%(asctime)s :: %(levelname)s :: %(funcName)s :: %(lineno)d :: %(message)s',
                     level=logging.INFO, filename=logger, filemode='a')
+nlp = spacy.load("pl_core_news_sm")
 
 
 def time_counter(fun):
@@ -23,7 +25,7 @@ def time_counter(fun):
         else:
             perf_time = np.round(perf_time, 2)
             measure = 'sek.'
-        logging.info(f'Performance time: {perf_time} {measure}')
+        logging.info(f'Performance time for {fun.__name__}: {perf_time} {measure}')
         return a
 
     return counter
