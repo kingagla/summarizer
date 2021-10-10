@@ -2,8 +2,7 @@ import re
 from collections import Counter
 
 from src import nlp
-from src.modelling.utils import score_sentence
-from src.utils import spacy_lemmatize
+from src.modelling.utils import score_sentence, spacy_lemmatize
 stopwords = nlp.Defaults.stop_words
 
 

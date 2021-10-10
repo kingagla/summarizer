@@ -1,7 +1,9 @@
+import json
+import logging
 import os
 import morfeusz2
 from src import time_counter, nlp
-
+from src.modelling.StatisticalSummarizer import StatisticalSummarizer
 
 def create_directory(directory):
     directory = os.path.abspath(directory).split('/')
@@ -23,6 +25,11 @@ def morf_lemmatize(text):
     return " ".join(text_new)
 
 
-def spacy_lemmatize(text):
-    doc = nlp(text)
-    yield " ".join([token.lemma_ for token in doc])
+def save_statistical_summary(article, directory, filename, counter):
+    summary = StatisticalSummarizer(article)
+    summary = summary.create_summary()
+    title = article['title']
+    summary = {'title': title, 'summary': summary}
+    with open(os.path.join(directory, filename), 'w') as outfile:
+        json.dump(summary, outfile)
+    logging.info(f'Element number {counter} in progress...')

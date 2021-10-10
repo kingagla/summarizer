@@ -2,18 +2,13 @@ import json
 import logging
 import os
 
+import multiprocessing as mp
 import numpy as np
-import pandas as pd
 
-from tqdm import tqdm
-from download_data import download_articles
-from data_analysis.DataAnalizer import DataAnalyser
 from src import nlp
-from src.modelling.StatisticalSummarizer import StatisticalSummarizer
-from src.utils import create_directory
+from src.utils import create_directory, save_statistical_summary
 
-# TODO: 1.  ogarnac skad blad, naprawic i zapisać te
-#  streszczenia i lecieć do kolejnej metody
+pool = mp.Pool(mp.cpu_count())
 
 
 def main():
@@ -45,16 +40,13 @@ def main():
     # statistical summary
     statistical_directory = os.path.join(os.path.dirname(path_to_articles), 'statistical_summaries')
     create_directory(statistical_directory)
-    # print('Saving statistical summaries...')
-    for article, file in tqdm(zip(articles, articles_list), total=n_articles):
-        summary = StatisticalSummarizer(article)
-        summary = summary.create_summary()
-        title = article['title']
-        to_save = {'title': title, 'summary': summary}
-        with open(os.path.join(statistical_directory, file), 'w') as outfile:
-            json.dump(to_save, outfile)
+    print('Saving statistical summaries...')
+    args = zip(articles, [statistical_directory] * n_articles, articles_list, range(n_articles))
+    pool.starmap_async(save_statistical_summary, args).get()
+    pool.close()
 
     logging.info(f"\nprocess finished\n{'=' * 100}")
+
 
 if __name__ == '__main__':
     main()
