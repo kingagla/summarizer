@@ -25,4 +25,4 @@ def morf_lemmatize(text):
 
 def spacy_lemmatize(text):
     doc = nlp(text)
-    return " ".join([token.lemma_ for token in doc])
+    yield " ".join([token.lemma_ for token in doc])

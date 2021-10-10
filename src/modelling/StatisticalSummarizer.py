@@ -9,7 +9,7 @@ stopwords = nlp.Defaults.stop_words
 
 class StatisticalSummarizer:
 
-    new_sentence_splitter = '\. (?=[A-ZĆŁŃÓŚŹŻ])|\n-'
+    new_sentence_splitter = '\. (?=[A-ZĆŁŃÓŚŹŻ-])|\n'
 
     def __init__(self, article):
         self.title = article['title']
@@ -21,10 +21,10 @@ class StatisticalSummarizer:
         text = re.split(self.new_sentence_splitter, self.text)
         new_text = ''
         for sentence in text:
-            temp_text = spacy_lemmatize(sentence)
+            temp_text = next(spacy_lemmatize(sentence))
             temp_text = re.sub('[^a-ż]', ' ', temp_text)
-            " ".join([word for word in temp_text.split() if word not in stopwords])
-            new_text += spacy_lemmatize(sentence) + '. '
+            temp_text = " ".join([word for word in temp_text.split() if word not in stopwords])
+            new_text += temp_text + '. '
         return new_text
 
     @property
