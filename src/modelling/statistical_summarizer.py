@@ -64,4 +64,4 @@ class StatisticalSummarizer:
         sentences_to_summary = list(map(lambda x: x[0], sentences_to_summary))[:n_sentences]
         text = split_text(self._text)
         sentences_to_summary = map(text.__getitem__, sentences_to_summary)
-        return ". ".join(sentences_to_summary)
+        return " ".join(sentences_to_summary)

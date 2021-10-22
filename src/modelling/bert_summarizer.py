@@ -64,4 +64,4 @@ class BERTExtractiveSummarizer:
         sentences_to_summary = self._choose_sentences_to_summary(n_sentences=n_sentences, metric=metric)
         text = split_text(self._text)
         sentences_to_summary = map(text.__getitem__, sentences_to_summary)
-        return ". ".join(sentences_to_summary)
+        return " ".join(sentences_to_summary)
