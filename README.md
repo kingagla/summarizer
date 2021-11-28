@@ -7,4 +7,4 @@ I consider 3 approaches:
 - **BART based** - abstractive summary using BART model with no customization.
 
 
-
+Run main.py to download articles, get plots with histograms (number of words/sentences per article) and most popular words and generated summaries of downloaded articles.
