@@ -88,32 +88,32 @@ def generate_abstractive_bart_summary(articles_list, articles_directory):
 def main():
     logging.info(f"process started\n{'=' * 100}")
 
-    # # define variables
-    # url_ = "https://wiadomosci.wp.pl"
-    # n_pages_ = 50
+    # define variables
+    url_ = "https://wiadomosci.wp.pl"
+    n_pages_ = 50
     articles_directory = '../data/articles'
     articles_list = [file for file in os.listdir(articles_directory) if file.endswith('.json')]
-    # articles_list = np.random.choice(articles_list, size=20)
-    # stopwords = nlp.Defaults.stop_words
-    # plot_directory = '../plots2'
-    #
-    # # # download articles
-    # # logging.info(f'Downloading articles - {n_pages_} pages')
-    # # download_articles(url_, n_pages_, articles_directory)
-    #
-    # # # analyse downloaded data
-    # # full_data_analysis(articles_list, stopwords, plot_directory, articles_directory)
-    #
-    # # statistical summary
-    # print('Saving statistical summaries...')
-    # logging.info(f"Saving statistical summaries...\n{'=' * 100}")
-    # generate_statistical_summary(articles_list, articles_directory)
-    # # logging.info("")
-    #
-    # # extractive
-    # print('Saving extractive BERT summaries...')
-    # logging.info(f"Saving extractive BERT summaries...\n{'=' * 100}")
-    # generate_extractive_bert_summary(articles_list, articles_directory)
+    articles_list = np.random.choice(articles_list, size=20)
+    stopwords = nlp.Defaults.stop_words
+    plot_directory = '../plots2'
+    
+    # download articles
+    logging.info(f'Downloading articles - {n_pages_} pages')
+    download_articles(url_, n_pages_, articles_directory)
+    
+    # analyse downloaded data
+    full_data_analysis(articles_list, stopwords, plot_directory, articles_directory)
+    
+    # statistical summary
+    print('Saving statistical summaries...')
+    logging.info(f"Saving statistical summaries...\n{'=' * 100}")
+    generate_statistical_summary(articles_list, articles_directory)
+    # logging.info("")
+    
+    # extractive
+    print('Saving extractive BERT summaries...')
+    logging.info(f"Saving extractive BERT summaries...\n{'=' * 100}")
+    generate_extractive_bert_summary(articles_list, articles_directory)
 
     # abstractive BART
     print('Saving abstractive BART summaries...')
