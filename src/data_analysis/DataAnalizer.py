@@ -20,6 +20,7 @@ class DataAnalyser:
         self.save_directory = save_directory
 
     def _preprocess(self, articles, total=None):
+
         # extract data from texts
         words_amount = []
         sentences_amount = []
@@ -32,9 +33,11 @@ class DataAnalyser:
         # lowercase texts
         logging.info('Texts to lowercase')
         full_text = full_text.lower()
+
         # remove non-words and numbers
         logging.info('remove non-words and numbers')
         full_text = re.sub('[^a-ż]', ' ', full_text)
+
         # remove stop words if provided
         logging.info('removing stopwords')
         full_text = " ".join([word for word in full_text.split() if word not in self.stopwords])
@@ -64,17 +67,22 @@ class DataAnalyser:
 
     def plot_histogram(self, attribute, bins=30):
         plt.figure(figsize=(12, 8))
+
         if attribute == 'both':
             x = self.words_amount
             y = self.sentences_amount
+
         elif attribute == 'words':
             x = self.words_amount
             y = None
+
         elif attribute == 'sentences':
             x = self.sentences_amount
             y = None
+
         else:
             raise AttributeError("attribute should be one of ('both', 'words', 'sentences')")
+
         file_name = f'{attribute}_hist_{bins}.png'
         sns.histplot(x=x, y=y, cbar=True, cbar_kws=dict(shrink=.75), bins=bins)
         plt.savefig(os.path.join(self.save_directory, file_name), format='png')

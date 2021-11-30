@@ -2,18 +2,16 @@ import json
 import logging
 import os
 
-import multiprocessing as mp
-import numpy as np
+from transformers import BartForConditionalGeneration, PreTrainedTokenizerFast, BartConfig, \
+    BertTokenizer, BertConfig, BertModel
 
 from src import nlp, time_counter
 from src.data_analysis.DataAnalizer import DataAnalyser
 from src.download_data.download_articles import download_articles
-from src.modelling.statistical_summarizer import StatisticalSummarizer
 from src.modelling.bart_summarizer import BARTAbstractiveSummarizer
 from src.modelling.bert_summarizer import BERTExtractiveSummarizer
-from src.utils import create_directory, save_summary, generate_summaries
-from transformers import BartForConditionalGeneration, PreTrainedTokenizerFast, BartConfig, \
-    BertTokenizer, BertConfig, BertModel
+from src.modelling.statistical_summarizer import StatisticalSummarizer
+from src.utils import create_directory, generate_summaries
 
 
 def full_data_analysis(articles_list, stopwords, plot_directory, articles_directory):
@@ -90,30 +88,31 @@ def main():
 
     # define variables
     url_ = "https://wiadomosci.wp.pl"
-    n_pages_ = 50
+    n_pages_ = 1
     articles_directory = '../data/articles'
-    articles_list = [file for file in os.listdir(articles_directory) if file.endswith('.json')]
-    articles_list = np.random.choice(articles_list, size=20)
+    create_directory(articles_directory)
     stopwords = nlp.Defaults.stop_words
     plot_directory = '../plots2'
-    
-    # download articles
-    logging.info(f'Downloading articles - {n_pages_} pages')
-    download_articles(url_, n_pages_, articles_directory)
-    
-    # analyse downloaded data
-    full_data_analysis(articles_list, stopwords, plot_directory, articles_directory)
-    
-    # statistical summary
-    print('Saving statistical summaries...')
-    logging.info(f"Saving statistical summaries...\n{'=' * 100}")
-    generate_statistical_summary(articles_list, articles_directory)
-    # logging.info("")
-    
-    # extractive
-    print('Saving extractive BERT summaries...')
-    logging.info(f"Saving extractive BERT summaries...\n{'=' * 100}")
-    generate_extractive_bert_summary(articles_list, articles_directory)
+
+    # # download articles
+    # logging.info(f'Downloading articles - {n_pages_} pages')
+    # download_articles(url_, n_pages_, articles_directory)
+    articles_list = [file for file in os.listdir(articles_directory) if file.endswith('.json')]
+    # # articles_list = np.random.choice(articles_list, size=20)
+
+    # # analyse downloaded data
+    # full_data_analysis(articles_list, stopwords, plot_directory, articles_directory)
+    #
+    # # statistical summary
+    # print('Saving statistical summaries...')
+    # logging.info(f"Saving statistical summaries...\n{'=' * 100}")
+    # generate_statistical_summary(articles_list, articles_directory)
+    # # logging.info("")
+    #
+    # # extractive
+    # print('Saving extractive BERT summaries...')
+    # logging.info(f"Saving extractive BERT summaries...\n{'=' * 100}")
+    # generate_extractive_bert_summary(articles_list, articles_directory)
 
     # abstractive BART
     print('Saving abstractive BART summaries...')

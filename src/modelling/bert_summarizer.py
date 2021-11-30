@@ -60,8 +60,11 @@ class BERTExtractiveSummarizer:
         temp = pd.DataFrame({'group': predicted, 'distance': distances})
         return temp.groupby('group').idxmin().values.flatten()
 
-    def create_summary(self, n_sentences=3, metric='euclidean'):
+    def create_summary(self, n_sentences=4, metric='euclidean'):
+        # choose sentences to summary (indices)
         sentences_to_summary = self._choose_sentences_to_summary(n_sentences=n_sentences, metric=metric)
+        # split text to sentences
         text = split_text(self._text)
+        # choose sentences to summary (text)
         sentences_to_summary = map(text.__getitem__, sentences_to_summary)
         return " ".join(sentences_to_summary)

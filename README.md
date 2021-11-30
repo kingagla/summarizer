@@ -6,5 +6,9 @@ I consider 3 approaches:
 - **BERT based** - extractive summary where sentences are chosen based on BERT embeddings of sentences. BERT representation of each sentence is a vector of length 768. K-Mean algorithm is applied on those vectors, where k=3. Summary is created from sentences that are closest to each center of the cluster.
 - **BART based** - abstractive summary using BART model with no customization.
 
+### Important information
+Please notice that to reproduce the project, folder BART should contain pre-trained polish-BART model which 
+is available here: https://github.com/sdadas/polish-nlp-resources
 
-Run main.py to download articles, get plots with histograms (number of words/sentences per article) and most popular words and generated summaries of downloaded articles.
+Run main.py to download articles, get plots with histograms (number of words/sentences per article), and most popular 
+words (among all articles) and generated summaries of downloaded articles (each kind of summary).

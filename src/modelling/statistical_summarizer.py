@@ -32,6 +32,10 @@ class StatisticalSummarizer:
 
     @property
     def lemmatized_article(self):
+        """
+        Lemmatize text and remove stop words
+        :return: lemmaized text
+        """
         text = split_text(self._text)
         new_text = ''
         for sentence in text:
@@ -59,7 +63,7 @@ class StatisticalSummarizer:
                         map(lambda x: score_sentence(x, words_popularity=self.common_words),
                             article_lem_split)))
 
-    def create_summary(self, n_sentences=3):
+    def create_summary(self, n_sentences=4):
         sentences_to_summary = sorted(self._text_to_score(), key=lambda x: x[1], reverse=True)
         sentences_to_summary = list(map(lambda x: x[0], sentences_to_summary))[:n_sentences]
         text = split_text(self._text)
