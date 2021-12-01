@@ -39,11 +39,17 @@ def save_summary(article, directory, filename, counter, summary_class, **kwargs)
     logging.info(f'Element number {counter} in progress...')
 
 
-def generate_summaries(articles_directory, summary_type, args, **kwargs):
-    directory = os.path.join(os.path.dirname(articles_directory), summary_type)
+def generate_summaries(main_directory, summary_type, args, **kwargs):
+    directory = os.path.join(main_directory, summary_type)
     create_directory(directory)
 
     pool = mp.Pool(mp.cpu_count())
     # pool.starmap_async(save_summary, args).get()
     pool.starmap_async(partial(save_summary, **kwargs), args).get()
     pool.close()
+
+
+def load_json(filepath, *args, **kwargs):
+    with open(os.path.join(filepath), 'r') as outfile:
+        file = json.load(outfile, *args, **kwargs)
+    return file

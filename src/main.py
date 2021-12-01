@@ -5,13 +5,15 @@ import os
 from transformers import BartForConditionalGeneration, PreTrainedTokenizerFast, BartConfig, \
     BertTokenizer, BertConfig, BertModel
 
-from src import nlp, time_counter
-from src.data_analysis.DataAnalizer import DataAnalyser
+from src import time_counter
+from src.configs import *
+from src.data_analysis.data_analysis import DataAnalyser
+from src.data_analysis.summary_comparison import generate_excel_with_comparison
 from src.download_data.download_articles import download_articles
 from src.modelling.bart_summarizer import BARTAbstractiveSummarizer
 from src.modelling.bert_summarizer import BERTExtractiveSummarizer
 from src.modelling.statistical_summarizer import StatisticalSummarizer
-from src.utils import create_directory, generate_summaries
+from src.utils import generate_summaries
 
 
 def full_data_analysis(articles_list, stopwords, plot_directory, articles_directory):
@@ -26,25 +28,25 @@ def full_data_analysis(articles_list, stopwords, plot_directory, articles_direct
     analyser.save_statistics()
 
 
-def generate_statistical_summary(articles_list, articles_directory):
-    summary_type = 'statistical_summaries'
+def generate_statistical_summary(articles_list):
+    summary_type = statistical_folder
     # define args
-    articles = map(lambda x: json.load(open(os.path.join(articles_directory, x), 'r')), articles_list)
+    articles = map(lambda x: json.load(open(os.path.join(main_data_directory, articles_folder, x), 'r')), articles_list)
     n_articles = len(articles_list)
-    statistical_directory = os.path.join(os.path.dirname(articles_directory), summary_type)
+    statistical_directory = os.path.join(main_data_directory, summary_type)
     args = zip(articles, [statistical_directory] * n_articles, articles_list, range(n_articles),
                [StatisticalSummarizer] * n_articles)
 
     # generate summaries
-    generate_summaries(articles_directory, summary_type, args)
+    generate_summaries(main_data_directory, summary_type, args)
 
 
-def generate_extractive_bert_summary(articles_list, articles_directory):
-    summary_type = 'extractive_bert'
+def generate_extractive_bert_summary(articles_list):
+    summary_type = bert_folder
     # define args
-    articles = map(lambda x: json.load(open(os.path.join(articles_directory, x), 'r')), articles_list)
+    articles = map(lambda x: json.load(open(os.path.join(main_data_directory, articles_folder, x), 'r')), articles_list)
     n_articles = len(articles_list)
-    extractive_bert_directory = os.path.join(os.path.dirname(articles_directory), summary_type)
+    extractive_bert_directory = os.path.join(main_data_directory, summary_type)
 
     # Load model, model config and tokenizer via Transformers
     pretrained_model = "dkleczek/bert-base-polish-cased-v1"
@@ -58,15 +60,15 @@ def generate_extractive_bert_summary(articles_list, articles_directory):
                [BERTExtractiveSummarizer] * n_articles)
 
     # generate summaries
-    generate_summaries(articles_directory, summary_type, args, **kwargs)
+    generate_summaries(main_data_directory, summary_type, args, **kwargs)
 
 
-def generate_abstractive_bart_summary(articles_list, articles_directory):
-    summary_type = 'abstractive_bart'
+def generate_abstractive_bart_summary(articles_list):
+    summary_type = bart_folder
     # define args
-    articles = map(lambda x: json.load(open(os.path.join(articles_directory, x), 'r')), articles_list)
+    articles = map(lambda x: json.load(open(os.path.join(main_data_directory, articles_folder, x), 'r')), articles_list)
     n_articles = len(articles_list)
-    abstractive_bart_directory = os.path.join(os.path.dirname(articles_directory), summary_type)
+    abstractive_bart_directory = os.path.join(main_data_directory, summary_type)
 
     # Load model, model config and tokenizer via Transformers
     model_dir = "../models/BART"
@@ -79,46 +81,46 @@ def generate_abstractive_bart_summary(articles_list, articles_directory):
                [BARTAbstractiveSummarizer] * n_articles)
 
     # generate summaries
-    generate_summaries(articles_directory, summary_type, args, **kwargs)
+    generate_summaries(main_data_directory, summary_type, args, **kwargs)
 
 
 @time_counter
 def main():
     logging.info(f"process started\n{'=' * 100}")
 
-    # define variables
-    url_ = "https://wiadomosci.wp.pl"
-    n_pages_ = 1
-    articles_directory = '../data/articles'
-    create_directory(articles_directory)
-    stopwords = nlp.Defaults.stop_words
-    plot_directory = '../plots2'
-
-    # # download articles
+    # # # download articles
     # logging.info(f'Downloading articles - {n_pages_} pages')
+    # articles_directory = os.path.join(main_data_directory, articles_folder)
     # download_articles(url_, n_pages_, articles_directory)
-    articles_list = [file for file in os.listdir(articles_directory) if file.endswith('.json')]
-    # # articles_list = np.random.choice(articles_list, size=20)
-
+    # articles_list = [file for file in os.listdir(articles_directory) if file.endswith('.json')]
+    #
     # # analyse downloaded data
-    # full_data_analysis(articles_list, stopwords, plot_directory, articles_directory)
+    # full_data_analysis(articles_list, stopwords, plot_directory, main_data_directory)
     #
     # # statistical summary
     # print('Saving statistical summaries...')
     # logging.info(f"Saving statistical summaries...\n{'=' * 100}")
-    # generate_statistical_summary(articles_list, articles_directory)
+    # generate_statistical_summary(articles_list)
     # # logging.info("")
     #
     # # extractive
     # print('Saving extractive BERT summaries...')
     # logging.info(f"Saving extractive BERT summaries...\n{'=' * 100}")
-    # generate_extractive_bert_summary(articles_list, articles_directory)
+    # generate_extractive_bert_summary(articles_list)
+    #
+    # # abstractive BART
+    # print('Saving abstractive BART summaries...')
+    # logging.info(f"Saving abstractive BART summaries...\n{'=' * 100}")
+    # generate_abstractive_bart_summary(articles_list)
+    # logging.info(f"process finished\n{'=' * 100}\n{'=' * 100}")
 
-    # abstractive BART
-    print('Saving abstractive BART summaries...')
-    logging.info(f"Saving abstractive BART summaries...\n{'=' * 100}")
-    generate_abstractive_bart_summary(articles_list, articles_directory)
-    logging.info(f"process finished\n{'=' * 100}\n{'=' * 100}")
+
+    # comparison
+    pretrained_model = "dkleczek/bert-base-polish-cased-v1"
+    config = BertConfig.from_pretrained(pretrained_model)
+    tokenizer = BertTokenizer.from_pretrained(pretrained_model)
+    model = BertModel.from_pretrained(pretrained_model, config=config)
+    generate_excel_with_comparison(main_data_directory, tokenizer, model)
 
 
 if __name__ == '__main__':
