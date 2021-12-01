@@ -88,39 +88,38 @@ def generate_abstractive_bart_summary(articles_list):
 def main():
     logging.info(f"process started\n{'=' * 100}")
 
-    # # # download articles
-    # logging.info(f'Downloading articles - {n_pages_} pages')
-    # articles_directory = os.path.join(main_data_directory, articles_folder)
-    # download_articles(url_, n_pages_, articles_directory)
-    # articles_list = [file for file in os.listdir(articles_directory) if file.endswith('.json')]
-    #
-    # # analyse downloaded data
-    # full_data_analysis(articles_list, stopwords, plot_directory, main_data_directory)
-    #
-    # # statistical summary
-    # print('Saving statistical summaries...')
-    # logging.info(f"Saving statistical summaries...\n{'=' * 100}")
-    # generate_statistical_summary(articles_list)
-    # # logging.info("")
-    #
-    # # extractive
-    # print('Saving extractive BERT summaries...')
-    # logging.info(f"Saving extractive BERT summaries...\n{'=' * 100}")
-    # generate_extractive_bert_summary(articles_list)
-    #
-    # # abstractive BART
-    # print('Saving abstractive BART summaries...')
-    # logging.info(f"Saving abstractive BART summaries...\n{'=' * 100}")
-    # generate_abstractive_bart_summary(articles_list)
-    # logging.info(f"process finished\n{'=' * 100}\n{'=' * 100}")
+    # # download articles
+    logging.info(f'Downloading articles - {n_pages_} pages')
+    articles_directory = os.path.join(main_data_directory, articles_folder)
+    download_articles(url_, n_pages_, articles_directory)
+    articles_list = [file for file in os.listdir(articles_directory) if file.endswith('.json')]
 
+    # analyse downloaded data
+    full_data_analysis(articles_list, stopwords, plot_directory, main_data_directory)
+
+    # statistical summary
+    print('Saving statistical summaries...')
+    logging.info(f"Saving statistical summaries...\n{'=' * 100}")
+    generate_statistical_summary(articles_list)
+    # logging.info("")
+
+    # extractive
+    print('Saving extractive BERT summaries...')
+    logging.info(f"Saving extractive BERT summaries...\n{'=' * 100}")
+    generate_extractive_bert_summary(articles_list)
+
+    # abstractive BART
+    print('Saving abstractive BART summaries...')
+    logging.info(f"Saving abstractive BART summaries...\n{'=' * 100}")
+    generate_abstractive_bart_summary(articles_list)
+    logging.info(f"process finished\n{'=' * 100}\n{'=' * 100}")
 
     # comparison
     pretrained_model = "dkleczek/bert-base-polish-cased-v1"
     config = BertConfig.from_pretrained(pretrained_model)
     tokenizer = BertTokenizer.from_pretrained(pretrained_model)
     model = BertModel.from_pretrained(pretrained_model, config=config)
-    generate_excel_with_comparison(main_data_directory, tokenizer, model)
+    generate_excel_with_comparison(os.path.join(main_data_directory, 'comparison'), tokenizer, model)
 
 
 if __name__ == '__main__':
