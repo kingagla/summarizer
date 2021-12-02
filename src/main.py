@@ -13,7 +13,7 @@ from src.download_data.download_articles import download_articles
 from src.modelling.bart_summarizer import BARTAbstractiveSummarizer
 from src.modelling.bert_summarizer import BERTExtractiveSummarizer
 from src.modelling.statistical_summarizer import StatisticalSummarizer
-from src.utils import generate_summaries
+from src.utils import generate_summaries, create_directory
 
 
 def full_data_analysis(articles_list, stopwords, plot_directory, articles_directory):
@@ -87,6 +87,7 @@ def generate_abstractive_bart_summary(articles_list):
 @time_counter
 def main():
     logging.info(f"process started\n{'=' * 100}")
+    create_directory(main_data_directory)
 
     # # download articles
     logging.info(f'Downloading articles - {n_pages_} pages')
