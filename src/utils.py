@@ -10,11 +10,14 @@ from src import time_counter
 
 
 def create_directory(directory):
-    directory = os.path.abspath(directory).split('/')
-    for i in range(2, len(directory) + 1):
-        direc = "/".join(directory[:i])
-        if not os.path.isdir(direc):
-            os.mkdir(direc)
+
+    if not os.path.isdir(directory):
+        print('Creating directory', os.path.abspath(directory))
+        directory = os.path.abspath(directory).split('/')
+        for i in range(2, len(directory) + 1):
+            direc = "/".join(directory[:i])
+            if not os.path.isdir(direc):
+                os.mkdir(direc)
 
 
 @time_counter
