@@ -1,7 +1,7 @@
 from src import nlp
 
 # main directory
-main_data_directory = '../data/current_analysis'
+main_data_directory = '../data'
 
 # folders
 statistical_folder = 'statistical_summaries'
@@ -11,8 +11,8 @@ articles_folder = 'articles'
 
 # define variables
 url_ = "https://wiadomosci.wp.pl"
-n_pages_ = 1
+n_pages_ = 30
 
 stopwords = nlp.Defaults.stop_words
-plot_directory = '../plots2'
+plot_directory = '../plots_3p_20211206'
 

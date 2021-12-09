@@ -7,7 +7,7 @@ from tqdm import tqdm
 
 from src.configs import *
 from src.modelling.utils import get_bert_representation, split_text
-from src.utils import load_json
+from src.utils import load_json, create_directory
 
 
 class SummaryComparator:
@@ -34,7 +34,7 @@ class SummaryComparator:
             input_ = tokenizer.encode(reference_text)
             bert_reference = model(torch.tensor([input_])).pooler_output.detach().numpy()
 
-        similarity_dict = {}
+        similarity_dict = {'title': [self.title]}
         for kind, summary in self.summaries.items():
             bert_summary = get_bert_representation(summary, tokenizer, model)
             similarity_dict[kind] = cosine_similarity(bert_reference, bert_summary)[0]
@@ -48,7 +48,8 @@ def generate_excel_with_comparison(directory, tokenizer, model):
     bert_directory = os.path.join(main_data_directory, bert_folder)
     bart_directory = os.path.join(main_data_directory, bart_folder)
 
-    files = os.listdir(articles_directory)
+    # files = os.listdir(articles_directory)
+    files = os.listdir(statistical_directory)
 
     cos_sim = pd.DataFrame()
     cos_sim_centroid = pd.DataFrame()
@@ -67,8 +68,8 @@ def generate_excel_with_comparison(directory, tokenizer, model):
         spacy_sim = spacy_sim.append(comparison.similarity_spacy(article_json['title']))
         spacy_sim_centroid = spacy_sim_centroid.append(comparison.similarity_spacy(article_json['text']))
 
-    cos_sim.to_excel(os.path.join(directory, 'cos_sim.xlsx'))
-    cos_sim_centroid.to_excel(os.path.join(directory, 'cos_sim_centroid.xlsx'))
-    spacy_sim.to_excel(os.path.join(directory, 'spacy_sim.xlsx'))
-    spacy_sim_centroid.to_excel(os.path.join(directory, 'spacy_sim_centroid.xlsx'))
+    cos_sim.to_excel(os.path.join(directory, 'cos_sim.xlsx'), index=False)
+    cos_sim_centroid.to_excel(os.path.join(directory, 'cos_sim_centroid.xlsx'), index=False)
+    spacy_sim.to_excel(os.path.join(directory, 'spacy_sim.xlsx'), index=False)
+    spacy_sim_centroid.to_excel(os.path.join(directory, 'spacy_sim_centroid.xlsx'), index=False)
 

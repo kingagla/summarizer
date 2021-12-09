@@ -58,7 +58,7 @@ class BERTExtractiveSummarizer:
         distances = np.diagonal(dist.pairwise(encoded_text, centers))
 
         temp = pd.DataFrame({'group': predicted, 'distance': distances})
-        return temp.groupby('group').idxmin().values.flatten()
+        return sorted(temp.groupby('group').idxmin().values.flatten())
 
     def create_summary(self, n_sentences=4, metric='euclidean'):
         # choose sentences to summary (indices)

@@ -96,7 +96,7 @@ def main():
     articles_list = [file for file in os.listdir(articles_directory) if file.endswith('.json')]
 
     # analyse downloaded data
-    full_data_analysis(articles_list, stopwords, plot_directory, main_data_directory)
+    full_data_analysis(articles_list, stopwords, plot_directory, articles_directory)
 
     # statistical summary
     print('Saving statistical summaries...')
