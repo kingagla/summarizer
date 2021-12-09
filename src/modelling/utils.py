@@ -26,4 +26,4 @@ def get_bert_representation(text, tokenizer, model):
         summary_input = tokenizer.encode(sent)
         summary_output = model(torch.tensor([summary_input])).pooler_output.detach().numpy()
         representation.append(summary_output)
-    return np.array(representation).sum(axis=0)
+    return np.array(representation).mean(axis=0)
