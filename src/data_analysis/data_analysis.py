@@ -9,8 +9,8 @@ import seaborn as sns
 
 from tqdm import tqdm
 
-from src.utils import morf_lemmatize, create_directory
-
+from src.utils import create_directory
+from src.modelling.utils import spacy_lemmatize
 
 class DataAnalyser:
     def __init__(self, articles, stopwords, save_directory, n_articles=None):
@@ -42,7 +42,7 @@ class DataAnalyser:
         logging.info('removing stopwords')
         full_text = " ".join([word for word in full_text.split() if word not in self.stopwords])
         logging.info('lemmatize text')
-        full_text = morf_lemmatize(text=full_text)
+        full_text = next(spacy_lemmatize(text=full_text))
 
         self.words_amount, self.sentences_amount, self.full_text = words_amount, sentences_amount, full_text
         return self

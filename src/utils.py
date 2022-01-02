@@ -4,8 +4,6 @@ import multiprocessing as mp
 import os
 from functools import partial
 
-import morfeusz2
-
 from src import time_counter
 
 
@@ -18,18 +16,6 @@ def create_directory(directory):
             direc = "/".join(directory[:i])
             if not os.path.isdir(direc):
                 os.mkdir(direc)
-
-
-@time_counter
-def morf_lemmatize(text):
-    if isinstance(text, str):
-        text = text.split()
-    morf = morfeusz2.Morfeusz(expand_dag=True, expand_tags=True)
-    text_new = []
-    for word in text:
-        w = morf.analyse(word)[0][0][1].split(':')[0]
-        text_new.append(w)
-    return " ".join(text_new)
 
 
 def save_summary(article, directory, filename, counter, summary_class, **kwargs):

@@ -1,12 +1,3 @@
-import numpy as np
-import pandas as pd
-import torch
-from sklearn.cluster import KMeans
-from sklearn.neighbors import DistanceMetric
-
-from src.modelling.utils import split_text
-
-
 class BARTAbstractiveSummarizer:
     """
     Abstractive summary creator - uses BART pre-trained model to create abstractive summary
